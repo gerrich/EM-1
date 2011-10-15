@@ -1,15 +1,12 @@
 #include "defs.h"
-#include "bill_generator.h"
+#include "em/vector.h"
 
 #include <algorithm>
 #include <fstream>
 #include <iterator>
-#include <vector>
-//#include <limits>
-
+//#include <vector>
 
 // Генератор счетов.
-
 
 void print_usage(const char* program)
 {
@@ -31,18 +28,11 @@ int main(int argc, char** argv)
 
     // Читаем лог событий.
     std::fstream in(argv[1], std::ios::in);
-    std::vector<LogEntry> entries;
+    em::vector<LogEntry> entries(argv[2]);
     std::copy(
         std::istream_iterator<LogEntry>(in),
         std::istream_iterator<LogEntry>(),
         std::back_inserter(entries));
-
-    // Сортируем по телефонному номеру.
-    std::sort(entries.begin(), entries.end(), SortByCaller());
-
-    // Генерируем счета.
-    std::fstream out(argv[2], std::ios::out);
-    std::for_each(entries.begin(), entries.end(), ProduceBill(out));
 
     return 0;
 }
