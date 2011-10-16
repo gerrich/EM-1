@@ -29,6 +29,13 @@ std::istream& operator>>(std::istream& is, LogEntry& entry) {
     is >> entry.event;
     return is;
 }
+std::ostream& operator<<(std::ostream& os, const LogEntry& entry) {
+    os << entry.source << "\t";
+    os << entry.target << "\t";
+    os << entry.timestamp << "\t";
+    os << entry.event;
+    return os;
+}
 
 // Лексикографический порядок на тройке (source, timestamp, event).
 struct SortByCaller {

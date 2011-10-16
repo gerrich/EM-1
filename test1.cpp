@@ -11,8 +11,7 @@
 // Генератор счетов.
 
 
-void print_usage(const char* program)
-{
+void print_usage(const char* program) {
     std::cout
         << "Usage: " << program << " <log-file> <bill-file> [memory]"
         << std::endl;
@@ -21,10 +20,8 @@ void print_usage(const char* program)
     std::cout << "bill-file\toutput file" << std::endl;
 }
 
-int main(int argc, char** argv)
-{
-    if (argc < 3)
-    {
+int main(int argc, char** argv) {
+    if (argc < 3) {
         print_usage(argv[0]);
         return 1;
     }

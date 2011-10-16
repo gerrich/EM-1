@@ -1,12 +1,3 @@
-
-set(NAME em_test)
-
-add_executable(${NAME}
-  em_test.cpp
-)
-
-#======================
-
 set(NAME parser)
 
 add_executable(${NAME}
@@ -30,3 +21,17 @@ add_executable(${NAME}
 )
 
 #======================
+
+add_executable(em_copy
+  em_copy.cpp
+)
+add_executable(em_test
+  em_test.cpp
+)
+add_executable(door_test
+  door_test.cpp
+)
+
+#======================
+
+

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "io_stat.h"
+
 #include <cstdio>
 #include <cstdlib>
 
@@ -22,7 +24,7 @@ using std::make_pair;
 
 namespace em {
 
-class TFile {
+class TFile : public TIOStat {
  public:
   static const size_t npos = -1;
 
@@ -38,7 +40,7 @@ class TFile {
     }
   }
 
-  TFile(const char* name, mode_t mode, size_t size = npos)
+  TFile(const char* name, int flags, size_t size = npos)
       : size_(0)
       , offset_(0) {
     if (size == npos) {
@@ -47,7 +49,7 @@ class TFile {
       size_ = filestatus.st_size;
     }
     
-    file_ = ::open(name, mode);
+    file_ = ::open(name, flags, S_IRUSR | S_IWUSR);
     
     if (size != npos) {
       ftruncate(file_, size);
@@ -61,17 +63,19 @@ class TFile {
 
   size_t read(void *buf, size_t size) const {
     ::lseek(file_, offset_, SEEK_SET);
+    TIOStat::read(size);
     return ::read(file_, buf, size);
   }
 
   size_t write(void *buf, size_t size) {
-    cerr << "old size: " << size_ << endl;
-    std::cerr << "write: " << size << " bytes at: " << offset_ << endl;
+    //cerr << "old size: " << size_ << endl;
+    //std::cerr << "write: " << size << " bytes at: " << offset_ << endl;
     ::lseek(file_, offset_, SEEK_SET);
+    TIOStat::write(size);
     size_t bytes_written = ::write(file_, buf, size);
-    offset_ += size;
+    offset_ += bytes_written;
     size_ = max(size_, offset_);
-    cerr << "new size: " << size_ << endl;
+    //cerr << "new size: " << size_ << endl;
     return bytes_written;
   }
 

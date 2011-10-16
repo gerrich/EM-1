@@ -32,6 +32,8 @@ class door {
       : offset_(offset) 
       , door_(door__)
       , buffer_(new TData[round_block_size / sizeof(TData)]) {
+        door_.file_.seek(offset_ + door_.offset_);
+        door_.file_.read((void*)(buffer_.get()), round_block_size);
     }
 
     read_iterator& operator ++() {
@@ -80,7 +82,7 @@ class door {
     write_iterator& operator ++() {
       offset_ += sizeof(TData);
       if (offset_ % round_block_size == 0) { // need to write data from file
-        cerr << "time to write at: " << offset_ - round_block_size + door_.offset_ << std::endl;
+        //cerr << "time to write at: " << offset_ - round_block_size + door_.offset_ << std::endl;
         door_.file_.seek(offset_ - round_block_size + door_.offset_);
         door_.file_.write((void*)(buffer_.get()), round_block_size);
         door_.size_ = max(door_.size_, offset_); // make the door little bit wider

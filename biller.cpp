@@ -9,8 +9,7 @@
 
 // Генератор счетов.
 
-void print_usage(const char* program)
-{
+void print_usage(const char* program) {
     std::cout
         << "Usage: " << program << " <sorted-file> <bill-file>"
         << std::endl;
