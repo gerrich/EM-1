@@ -44,6 +44,6 @@ struct SortByCaller
             || (lhs.source == rhs.source && lhs.target == rhs.target && 
                     lhs.timestamp == rhs.timestamp && lhs.event < rhs.event);
     }
+    
 };
-
 

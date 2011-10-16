@@ -14,8 +14,8 @@ using std::make_pair;
 
 namespace em {
 
-template <typename TData>
-void sort(TFile &file) {
+template <typename TData, typename TComparator>
+void sort(TFile &file, TComparator comparator) {
   const size_t block_size = 1024*1024;
   const size_t mem_size = block_size * 128;
 
@@ -26,7 +26,7 @@ void sort(TFile &file) {
     window_size = min(window_size, file.size() - offset);
     contents.push_back(make_pair(offset, window_size));
     window<TData> w(file, offset, window_size);
-    std::sort(w.begin(), w.end());
+    std::sort(w.begin(), w.end(), comparator);
     w.flush(file, offset);
   }
 
@@ -37,34 +37,34 @@ void sort(TFile &file) {
     size_t out_offset = 0;
     std::vector<coord> new_contents;
     for (size_t index = 0; index < contents.size(); index += 2) {
-      door<TData> door_first(*in_file_ptr, contents[index].first, contents[index].second);
-      door<TData> door_second(*in_file_ptr, contents[index + 1].first, contents[index + 1].second);
+      const door<TData> door_first(*in_file_ptr, contents[index].first, contents[index].second);
+      const door<TData> door_second(*in_file_ptr, contents[index + 1].first, contents[index + 1].second);
       size_t out_size = contents[index].second + contents[index + 1].second;
       door<TData> door_out(*out_file_ptr, out_offset, out_size);
       new_contents.push_back(make_pair(out_offset, out_size));
       std::merge(
           door_first.begin(), door_first.end(),
           door_second.begin(), door_second.end(),
-          door_out.begin);
+          door_out.begin(), comparator);
       out_offset += out_size;
     }
     if (contents.size() % 2) {
-      door<TData> door_first(*in_file_ptr, contents.back().first, contents.back().second);
+      const door<TData> door_first(*in_file_ptr, contents.back().first, contents.back().second);
       door<TData> door_out(*out_file_ptr, out_offset, contents.back().second);
       new_contents.push_back(make_pair(out_offset, contents.back().second));
       std::copy(
           door_first.begin(), door_first.end(),
-          door_out.begin);
+          door_out.begin());
     }
     std::swap(new_contents, contents);
     std::swap(in_file_ptr, out_file_ptr);
   }
   if (in_file_ptr != &file) { // swap if result left in tmp file
-    door<TData> door_first(*in_file_ptr, 0, file.size());
+    const door<TData> door_first(*in_file_ptr, 0, file.size());
     door<TData> door_out(*out_file_ptr, 0, file.size());
     std::copy(
         door_first.begin(), door_first.end(),
-        door_out.begin);
+        door_out.begin());
   }
 }
 
