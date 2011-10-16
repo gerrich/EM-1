@@ -1,9 +1,10 @@
-CMakeCache.txt
+/CMakeCache.txt
 CMakeFiles
 *.cmake
+Makefile
 
-./data
-./bin
+/data
+bin
 *.o
 *.a
 *.bin
