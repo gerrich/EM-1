@@ -1,5 +1,10 @@
-/bin
-.o
-.a
-.bin
+CMakeCache.txt
+CMakeFiles
+*.cmake
 
+./data
+./bin
+*.o
+*.a
+*.bin
+.*.swp
