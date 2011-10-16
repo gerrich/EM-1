@@ -11,7 +11,7 @@ int main() {
 
   em::TFile f(fname, O_RDWR | O_CREAT | O_TRUNC, 0); 
  
-  ssize_t cnt = 1024 * 1024 * 8; 
+  size_t cnt = 1024 * 1024 * 8; 
   em::window<int> w(f, 0, sizeof(int)*cnt);
   em::window<int>::iterator it = w.begin();
   srand(time(NULL));

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "defs.h"
 #include "file.h"
 #include <vector>
 #include <algorithm>
@@ -17,9 +18,8 @@ namespace em {
 template <typename TData>
 class door {
  public:
+  static const size_t round_block_size = block_size - block_size % sizeof(TData);
   static const size_t npos = -1;
-  static const size_t block_size = 1024*1024;
-  static const size_t round_block_size = (block_size / sizeof(TData)) * sizeof(TData);
 
   class read_iterator: public std::iterator<std::forward_iterator_tag, TData, ptrdiff_t, TData*, const TData&> {
    public:

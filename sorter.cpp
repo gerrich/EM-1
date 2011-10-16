@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
         print_usage(argv[0]);
         return 1;
     }
+    cerr << "B :" << (double(em::block_size) / 1024 / 1024) << "\tmem_size: " << (double(em::mem_size) / 1024 / 1024) << endl;
 
     em::TFile parsed_log(argv[1], O_RDONLY);
     const em::door<LogEntry> in_door(parsed_log, 0, parsed_log.size());
@@ -39,8 +40,6 @@ int main(int argc, char** argv) {
 
     std::cout << "#========== IO stats ==========" << std::endl;
     em::TIOStat::print_stat(std::cout);
-    std::cout << std::endl;
-    std::cout << std::endl;
 
     if (0) {
       const em::door<LogEntry> in_door(sorted_log, 0, sorted_log.size());

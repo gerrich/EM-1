@@ -1,5 +1,6 @@
 #pragma once
 
+#include "defs.h"
 #include "file.h"
 #include "door.h"
 #include "vector.h"
@@ -16,8 +17,6 @@ namespace em {
 
 template <typename TData, typename TComparator>
 void sort(TFile &file, TComparator comparator) {
-  const size_t block_size = 1024*1024*4;
-  const size_t mem_size = 1024*1024*64;
 
   size_t round_mem_size = mem_size - (mem_size % sizeof(TData));
   typedef std::pair<size_t, size_t> coord;
@@ -25,14 +24,14 @@ void sort(TFile &file, TComparator comparator) {
   cerr << "SORT windows:" << endl;
   for (size_t offset = 0; offset < file.size(); offset += round_mem_size) {
     size_t window_size = min(round_mem_size, file.size() - offset);
-    cerr << "offset: " << offset << "\twind_size: " << window_size << endl; 
+    //cerr << "offset: " << offset << "\twind_size: " << window_size << endl; 
     contents.push_back(make_pair(offset, window_size));
     window<TData> w(file, offset, window_size);
     std::sort(w.begin(), w.end(), comparator);
     w.flush(file, offset);
   }
   cerr << "DONE:" << endl;
-  cerr << "fsize: " << file.size() << endl;
+  //cerr << "fsize: " << file.size() << endl;
 
   char tmp_name[] = "tmp-xxxxxx";
   TFile tmp_file(tmp_name, O_RDWR | O_CREAT | O_TRUNC, file.size());
