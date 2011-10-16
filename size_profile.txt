@@ -1,0 +1,84 @@
+B = 1M;
+M = 64M;
+rev 3a5448e
+
+200m
+#========== IO stats ==========
+read_bytes: 64197511936
+read_calls: 55216
+write_bytes: 64096612352
+write_calls: 55127
+
+real	12m45.358s
+user	1m53.410s
+sys	2m53.790s
+
+100m
+#========== IO stats ==========
+read_bytes: 25695102080
+read_calls: 21501
+write_bytes: 25648028288
+write_calls: 21459
+
+real	5m0.535s
+user	0m52.800s
+sys	1m5.840s
+
+
+50m
+#========== IO stats ==========
+read_bytes: 12844931392
+read_calls: 10748
+write_bytes: 12823637760
+write_calls: 10729
+
+real	2m18.807s
+user	0m25.670s
+sys	0m30.700s
+
+10m
+#========== IO stats ==========
+read_bytes: 1931664384
+read_calls: 1542
+write_bytes: 1923351552
+write_calls: 1539
+
+real	0m11.197s
+user	0m4.650s
+sys	0m3.310s
+
+
+1m
+#========== IO stats ==========
+read_bytes: 64507584
+read_calls: 32
+write_bytes: 64003456
+write_calls: 32
+
+real	0m0.535s
+user	0m0.350s
+sys	0m0.180s
+
+
+100k
+#========== IO stats ==========
+read_bytes: 7394880
+read_calls: 5
+write_bytes: 6401152
+write_calls: 5
+
+real	0m0.056s
+user	0m0.020s
+sys	0m0.030s
+
+
+10k
+#========== IO stats ==========
+read_bytes: 1370688
+read_calls: 2
+write_bytes: 644224
+write_calls: 2
+
+real	0m0.010s
+user	0m0.000s
+sys	0m0.000s

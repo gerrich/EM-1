@@ -1,0 +1,49 @@
+50m
+M = 64M
+rev 3a5448e
+
+B=4m
+#========== IO stats ==========
+read_bytes: 12844931392
+read_calls: 10748
+write_bytes: 12823637760
+write_calls: 10729
+
+real	2m18.807s
+user	0m25.670s
+sys	0m30.700s
+
+B=2m
+#========== IO stats ==========
+read_bytes: 12888971584
+read_calls: 5407
+write_bytes: 12847755008
+write_calls: 5388
+
+real	2m12.770s
+user	0m25.950s
+sys	0m33.030s
+
+B=1m
+#========== IO stats ==========
+read_bytes: 12844931392
+read_calls: 10748
+write_bytes: 12823637760
+write_calls: 10729
+
+real	2m10.432s
+user	0m26.280s
+sys	0m30.450s
+
+B=0.5m
+#========== IO stats ==========
+read_bytes: 12822911296
+read_calls: 21430
+write_bytes: 12811579136
+write_calls: 21411
+
+real	2m10.243s
+user	0m25.880s
+sys	0m28.850s
+
+
