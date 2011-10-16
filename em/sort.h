@@ -17,7 +17,7 @@ namespace em {
 template <typename TData, typename TComparator>
 void sort(TFile &file, TComparator comparator) {
   const size_t block_size = 1024*1024*4;
-  const size_t mem_size = block_size * 16;
+  const size_t mem_size = 1024*1024*64;
 
   size_t round_mem_size = mem_size - (mem_size % sizeof(TData));
   typedef std::pair<size_t, size_t> coord;
