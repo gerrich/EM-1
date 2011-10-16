@@ -19,16 +19,19 @@ void sort(TFile &file, TComparator comparator) {
   const size_t block_size = 1024*1024;
   const size_t mem_size = block_size * 128;
 
-  size_t window_size = (mem_size / sizeof(TData)) * sizeof(TData);
+  size_t round_mem_size = mem_size - (mem_size % sizeof(TData));
   typedef std::pair<size_t, size_t> coord;
   std::vector<coord> contents;
-  for (size_t offset = 0; offset < file.size(); offset += window_size) {
-    window_size = min(window_size, file.size() - offset);
+  for (size_t offset = 0; offset < file.size(); offset += round_mem_size) {
+    cerr << "offset: " << offset << endl; 
+    size_t window_size = min(round_mem_size, file.size() - offset);
+    cerr << "fsize: " << file.size() << "\twind_size: " << window_size << endl; 
     contents.push_back(make_pair(offset, window_size));
     window<TData> w(file, offset, window_size);
     std::sort(w.begin(), w.end(), comparator);
     w.flush(file, offset);
   }
+  cerr << "fsize: " << file.size() << endl;
 
   TFile tmp_file(file.size());
   TFile* in_file_ptr = &file;

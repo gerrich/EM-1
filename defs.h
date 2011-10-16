@@ -14,8 +14,7 @@ enum {
 };
 
 // Запись в журнале событий.
-struct LogEntry
-{
+struct LogEntry {
     int64_t source;
     int64_t target;
 
@@ -23,8 +22,7 @@ struct LogEntry
     int event;
 };
 
-std::istream& operator>>(std::istream& is, LogEntry& entry)
-{
+std::istream& operator>>(std::istream& is, LogEntry& entry) {
     is >> entry.source;
     is >> entry.target;
     is >> entry.timestamp;
@@ -33,10 +31,8 @@ std::istream& operator>>(std::istream& is, LogEntry& entry)
 }
 
 // Лексикографический порядок на тройке (source, timestamp, event).
-struct SortByCaller
-{
-    inline bool operator()(const LogEntry& lhs, const LogEntry& rhs) const
-    {
+struct SortByCaller {
+    inline bool operator()(const LogEntry& lhs, const LogEntry& rhs) const {
         return (lhs.source <  rhs.source)
             || (lhs.source == rhs.source && lhs.target < rhs.target)
             || (lhs.source == rhs.source && lhs.target == rhs.target &&
@@ -44,6 +40,5 @@ struct SortByCaller
             || (lhs.source == rhs.source && lhs.target == rhs.target && 
                     lhs.timestamp == rhs.timestamp && lhs.event < rhs.event);
     }
-    
 };
 

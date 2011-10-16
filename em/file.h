@@ -12,6 +12,10 @@
 #include <algorithm>
 #include <utility>
 
+#include <iostream>
+using std::cerr;
+using std::endl;
+
 using std::max;
 using std::min;
 using std::make_pair;
@@ -24,6 +28,7 @@ class TFile {
 
   TFile(size_t size = npos)
       : size_(0)
+      , offset_(0)
   {
     char tmpl[] = "file_xxxxxx";
     file_ = ::mkstemp(tmpl);
@@ -34,7 +39,8 @@ class TFile {
   }
 
   TFile(const char* name, size_t size = npos)
-      :size_(0) {
+      :size_(0)
+      , offset_(0) {
     struct stat filestatus;
     stat(name, &filestatus);
     size_ = filestatus.st_size;
@@ -51,17 +57,24 @@ class TFile {
   }
 
   size_t read(void *buf, size_t size) const {
+    ::lseek(file_, offset_, SEEK_SET);
     return ::read(file_, buf, size);
   }
 
   size_t write(void *buf, size_t size) {
     size_t bytes_written = ::write(file_, buf, size);
-    size_ = max(size_, (size_t)::lseek(file_, 0, SEEK_CUR));
+    ::lseek(file_, offset_, SEEK_SET);
+    offset_ += size;
+    size_ = max(size_, offset_);
+
+    std::cerr << "write: " << size << " bytes" << endl;
     return bytes_written;
   }
 
   size_t seek(size_t offset) {
-    return ::lseek(file_, offset, SEEK_SET);
+    offset_ = offset;
+    return offset_;
+//    return ::lseek(file_, offset, SEEK_SET);
   }
 
   size_t size() const {
@@ -71,6 +84,7 @@ class TFile {
  private:
   int file_;
   size_t size_;
+  size_t offset_;
 };
 
 } //namespace em {

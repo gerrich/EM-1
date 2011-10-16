@@ -1,5 +1,5 @@
 #include "defs.h"
-#include "em/vector.h"
+#include "em/door.h"
 
 #include <algorithm>
 #include <fstream>
@@ -28,11 +28,12 @@ int main(int argc, char** argv)
 
     // Читаем лог событий.
     std::fstream in(argv[1], std::ios::in);
-    em::vector<LogEntry> entries(argv[2]);
+    em::TFile f(argv[2]);
+    em::door<LogEntry> out_door(f, 0, 0);
     std::copy(
         std::istream_iterator<LogEntry>(in),
         std::istream_iterator<LogEntry>(),
-        std::back_inserter(entries));
+        out_door.begin());
 
     return 0;
 }

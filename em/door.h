@@ -10,6 +10,7 @@ using std::max;
 using std::min;
 
 #include <boost/shared_array.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace em {
 
@@ -34,7 +35,7 @@ class door {
     }
 
     read_iterator& operator ++() {
-      ++offset_;
+      offset_ += sizeof(TData);
       if (offset_ % round_block_size == 0) { // need to read data from file
         door_.file_.seek(offset_ + door_.offset_);
         door_.file_.read((void*)(buffer_.get()), round_block_size);
@@ -72,35 +73,45 @@ class door {
     write_iterator(door &door__, size_t offset)
       : offset_(offset) 
       , door_(door__)
-      , buffer_(new TData[round_block_size]) {
+      , buffer_(new TData[round_block_size])
+      , altered_flag_ptr_(new bool(false)) {
     }
 
     write_iterator& operator ++() {
-      ++offset_;
+      offset_ += sizeof(TData);
       if (offset_ % round_block_size == 0) { // need to write data from file
+        cerr << "time to write at: " << offset_ - round_block_size + door_.offset_ << std::endl;
         door_.file_.seek(offset_ - round_block_size + door_.offset_);
         door_.file_.write((void*)(buffer_.get()), round_block_size);
+        door_.size_ = max(door_.size_, offset_); // make the door little bit wider
+        *altered_flag_ptr_ = false;
       }
       return *this;
     }
 
     ~write_iterator() {
-      size_t round_offset = offset_ - (offset_ % round_block_size);
-      size_t size_to_write = min(door_.size_ - round_offset, size_t(round_block_size));
-      if (size_to_write > 0) {
-        door_.file_.seek(round_offset + door_.offset_);
-        door_.file_.write((void*)(buffer_.get()), size_to_write);
+      if (*altered_flag_ptr_) {
+        size_t round_offset = offset_ - (offset_ % round_block_size);
+        size_t size_to_write = min(max(door_.size_, offset_) - round_offset, size_t(round_block_size));
+        if (size_to_write > 0) {
+          door_.file_.seek(round_offset + door_.offset_);
+          door_.file_.write((void*)(buffer_.get()), size_to_write);
+          door_.size_ = max(door_.size_, offset_); // enlarge the door size
+        }
+        *altered_flag_ptr_ = false;
       }
     }
 
     TData& operator*() {
-      return buffer_[offset_ % round_block_size];
+      *altered_flag_ptr_ = true;
+      return buffer_[(offset_ % round_block_size) / sizeof(TData)];
     }
 
    private:
     size_t offset_;
     door &door_;
     boost::shared_array<TData> buffer_;
+    boost::shared_ptr<bool> altered_flag_ptr_;
   };
 
   door(TFile& file, size_t offset, size_t size)
@@ -128,7 +139,4 @@ class door {
   size_t offset_;
   size_t size_;
 };
-
-
-
 } // namespace em {
