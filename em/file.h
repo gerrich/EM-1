@@ -38,14 +38,17 @@ class TFile {
     }
   }
 
-  TFile(const char* name, size_t size = npos)
-      :size_(0)
+  TFile(const char* name, mode_t mode, size_t size = npos)
+      : size_(0)
       , offset_(0) {
-    struct stat filestatus;
-    stat(name, &filestatus);
-    size_ = filestatus.st_size;
-
-    file_ = ::open(name, O_RDWR|O_CREAT);
+    if (size == npos) {
+      struct stat filestatus;
+      stat(name, &filestatus);
+      size_ = filestatus.st_size;
+    }
+    
+    file_ = ::open(name, mode);
+    
     if (size != npos) {
       ftruncate(file_, size);
       size_ = size;
@@ -62,12 +65,13 @@ class TFile {
   }
 
   size_t write(void *buf, size_t size) {
-    size_t bytes_written = ::write(file_, buf, size);
+    cerr << "old size: " << size_ << endl;
+    std::cerr << "write: " << size << " bytes at: " << offset_ << endl;
     ::lseek(file_, offset_, SEEK_SET);
+    size_t bytes_written = ::write(file_, buf, size);
     offset_ += size;
     size_ = max(size_, offset_);
-
-    std::cerr << "write: " << size << " bytes" << endl;
+    cerr << "new size: " << size_ << endl;
     return bytes_written;
   }
 

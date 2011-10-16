@@ -25,8 +25,8 @@ add_executable(${NAME}
 
 set(NAME biller)
 
-#add_executable(${NAME}
-#  biller.cpp
-#)
+add_executable(${NAME}
+  biller.cpp
+)
 
 #======================

@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
     // Читаем лог событий.
     std::fstream in(argv[1], std::ios::in);
-    em::TFile f(argv[2]);
+    em::TFile f(argv[2], O_WRONLY | O_CREAT | O_TRUNC);
     em::door<LogEntry> out_door(f, 0, 0);
     std::copy(
         std::istream_iterator<LogEntry>(in),

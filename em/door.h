@@ -31,7 +31,7 @@ class door {
     read_iterator(const door &door__, size_t offset)
       : offset_(offset) 
       , door_(door__)
-      , buffer_(new TData[round_block_size]) {
+      , buffer_(new TData[round_block_size / sizeof(TData)]) {
     }
 
     read_iterator& operator ++() {
@@ -44,13 +44,13 @@ class door {
     }
     
     const TData& operator*() const {
-      return buffer_[offset_ % round_block_size];
+      return buffer_[(offset_ % round_block_size) / sizeof(TData)];
     }
 
     bool operator == (const read_iterator& rhs) const {
       return (
-          (offset_ == door_.npos || offset_ == door_.offset_ + door_.size_) &&
-          (rhs.offset_ == rhs.door_.npos || rhs.offset_ == rhs.door_.offset_ + rhs.door_.size_)) ||
+          (offset_ == door_.npos || offset_ == door_.size_) &&
+          (rhs.offset_ == rhs.door_.npos || rhs.offset_ == rhs.door_.size_)) ||
           offset_ == rhs.offset_;
     }
     bool operator != (const read_iterator& rhs) const {
@@ -73,7 +73,7 @@ class door {
     write_iterator(door &door__, size_t offset)
       : offset_(offset) 
       , door_(door__)
-      , buffer_(new TData[round_block_size])
+      , buffer_(new TData[round_block_size / sizeof(TData)])
       , altered_flag_ptr_(new bool(false)) {
     }
 

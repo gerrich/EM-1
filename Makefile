@@ -96,6 +96,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named biller
+
+# Build rule for target.
+biller: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 biller
+.PHONY : biller
+
+# fast build rule for target.
+biller/fast:
+	$(MAKE) -f CMakeFiles/biller.dir/build.make CMakeFiles/biller.dir/build
+.PHONY : biller/fast
+
+#=============================================================================
 # Target rules for targets named em_test
 
 # Build rule for target.
@@ -133,6 +146,30 @@ sorter: cmake_check_build_system
 sorter/fast:
 	$(MAKE) -f CMakeFiles/sorter.dir/build.make CMakeFiles/sorter.dir/build
 .PHONY : sorter/fast
+
+biller.o: biller.cpp.o
+.PHONY : biller.o
+
+# target to build an object file
+biller.cpp.o:
+	$(MAKE) -f CMakeFiles/biller.dir/build.make CMakeFiles/biller.dir/biller.cpp.o
+.PHONY : biller.cpp.o
+
+biller.i: biller.cpp.i
+.PHONY : biller.i
+
+# target to preprocess a source file
+biller.cpp.i:
+	$(MAKE) -f CMakeFiles/biller.dir/build.make CMakeFiles/biller.dir/biller.cpp.i
+.PHONY : biller.cpp.i
+
+biller.s: biller.cpp.s
+.PHONY : biller.s
+
+# target to generate assembly for a file
+biller.cpp.s:
+	$(MAKE) -f CMakeFiles/biller.dir/build.make CMakeFiles/biller.dir/biller.cpp.s
+.PHONY : biller.cpp.s
 
 em_test.o: em_test.cpp.o
 .PHONY : em_test.o
@@ -212,11 +249,15 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... biller"
 	@echo "... edit_cache"
 	@echo "... em_test"
 	@echo "... parser"
 	@echo "... rebuild_cache"
 	@echo "... sorter"
+	@echo "... biller.o"
+	@echo "... biller.i"
+	@echo "... biller.s"
 	@echo "... em_test.o"
 	@echo "... em_test.i"
 	@echo "... em_test.s"
